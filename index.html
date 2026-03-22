@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Jasmine Brown</title>
+  <style>
+    :root {
+      --bg-1: #120f2f;
+      --bg-2: #1d1747;
+      --bg-3: #2c215f;
+      --panel: rgba(255, 248, 220, 0.08);
+      --border: rgba(212, 175, 55, 0.22);
+      --text: #f8f2df;
+      --muted: #ddd2b0;
+      --gold: #d4af37;
+      --gold-soft: #c9a227;
+      --lavender: #d9d0ff;
+      --shadow: 0 18px 38px rgba(0, 0, 0, 0.28);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(circle at top, rgba(212, 175, 55, 0.12), transparent 22%),
+        linear-gradient(135deg, var(--bg-1), var(--bg-2), var(--bg-3));
+      color: var(--text);
+      min-height: 100vh;
+      font-size: 16px;
+      line-height: 1.7;
+      padding: 24px 16px 60px;
+    }
+
+    body.light-mode {
+      --bg-1: #f3ead0;
+      --bg-2: #eadcb5;
+      --bg-3: #e1d1a3;
+      --panel: rgba(255, 255, 255, 0.55);
+      --border: rgba(122, 89, 15, 0.18);
+      --text: #2d2243;
+      --muted: #5e4a2b;
+      --gold: #8b6a10;
+      --gold-soft: #7a5d0d;
+      --lavender: #574a86;
+      --shadow: 0 18px 34px rgba(92, 74, 23, 0.15);
+    }
+
+    .container {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .top-pill,
+    .mode-toggle,
+    .controls button,
+    .slide-controls button,
+    .calc-form button,
+    .nav button {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 10px 16px;
+      font: inherit;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .mode-toggle,
+    .controls button,
+    .slide-controls button,
+    .calc-form button,
+    .nav button {
+      box-shadow: none;
+    }
+
+    .mode-toggle:hover,
+    .controls button:hover,
+    .slide-controls button:hover,
+    .calc-form button:hover,
+    .nav button:hover,
+    .nav button.active {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .nav {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+
+    .hero,
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .hero {
+      padding: 42px 30px;
+      text-align: center;
+      margin-bottom: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "𓂀";
+      position: absolute;
+      top: 18px;
+      left: 22px;
+      color: var(--gold);
+      font-size: 1.5rem;
+    }
+
+    .hero::after {
+      content: "𓋹";
+      position: absolute;
+      bottom: 18px;
+      right: 22px;
+      color: var(--gold);
+      font-size: 1.5rem;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 0.82rem;
+      margin-bottom: 12px;
+    }
+
+    h1,
+    .card h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      letter-spacing: 1px;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+      line-height: 1.05;
+      margin-bottom: 14px;
+    }
+
+    .hero p {
+      max-width: 780px;
+      margin: 0 auto;
+      color: var(--muted);
+    }
+
+    .quick-facts {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .fact {
+      text-align: center;
+      padding: 20px 16px;
+    }
+
+    .fact span {
+      display: block;
+      color: var(--gold);
+      text-transform: uppercase;
+      font-size: 0.82rem;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .fact strong {
+      font-size: 1.06rem;
+      font-weight: 700;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin: 0 0 22px;
+    }
+
+    .message {
+      text-align: center;
+      color: var(--gold);
+      margin-bottom: 20px;
+      min-height: 28px;
+      font-style: italic;
+    }
+
+    .affirmation {
+      margin-bottom: 20px;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      color: var(--lavender);
+      text-align: center;
+    }
+
+    .sections {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      padding: 26px;
+    }
+
+    .card h2 {
+      color: var(--gold);
+      font-size: 1.45rem;
+      margin-bottom: 12px;
+    }
+
+    .card p + p {
+      margin-top: 12px;
+    }
+
+    ul {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    li {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 12px 14px;
+    }
+
+    .chart {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .number-box {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 16px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .number-box:hover {
+      transform: scale(1.02);
+    }
+
+    .number-box h3 {
+      color: var(--lavender);
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    .value {
+      color: var(--gold);
+      font-size: 1.95rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .spotlight {
+      box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.55), 0 0 18px rgba(212, 175, 55, 0.18);
+      transform: scale(1.03);
+    }
+
+    .calc-form {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .calc-form input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      font: inherit;
+    }
+
+    .calc-result {
+      margin-top: 4px;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--lavender);
+    }
+
+    .slideshow {
+      position: relative;
+      min-height: 420px;
+    }
+
+    .slide {
+      display: none;
+      text-align: center;
+    }
+
+    .slide.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .slide img {
+      width: 100%;
+      max-height: 430px;
+      object-fit: cover;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      margin-bottom: 12px;
+      background: rgba(0,0,0,0.18);
+    }
+
+    .slide-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 28px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 900px) {
+      .quick-facts,
+      .sections,
+      .chart {
+        grid-template-columns: 1fr;
+      }
+
+      .hero,
+      .card {
+        padding: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <div class="top-bar">
+      <div class="top-pill" id="dateBox">Welcome</div>
+      <div class="top-pill" id="quoteBanner">Curious minds uncover deeper truths.</div>
+      <button class="mode-toggle" id="modeToggle">Toggle Dark / Light</button>
+    </div>
+
+    <nav class="nav">
+      <button class="nav-btn active" data-target="summary">Summary</button>
+      <button class="nav-btn" data-target="story">My Story</button>
+      <button class="nav-btn" data-target="interests">Interests</button>
+      <button class="nav-btn" data-target="numerology">Numerology</button>
+      <button class="nav-btn" data-target="photos">Photos</button>
+      <button class="nav-btn" data-target="blog">Blog</button>
+    </nav>
+
+    <section class="hero reveal">
+      <div class="eyebrow">About Me</div>
+      <h1>Jasmine Brown</h1>
+      <p>
+        I am Jasmine Brown,, born in Brooklyn, New York.
+        I am from East New York, raised in the Cypress Hills Houses by my mom Margaret Brown and my dad Herbert Smith.
+        I am a proud mom to my amazing son, Jameer Dore, who is 11 and the light of my whole world.
+      </p>
+    </section>
+
+    <section class="quick-facts">
+      <article class="card fact reveal">
+        <span>Name</span>
+        <strong>Jasmine Brown</strong>
+      </article>
+      <article class="card fact reveal">
+        <span>Age</span>
+        <strong> UNKNOWN</strong>
+      </article>
+      <article class="card fact reveal">
+        <span>From</span>
+        <strong>Brooklyn, New York</strong>
+      </article>
+      <article class="card fact reveal">
+        <span>Sign</span>
+        <strong>Gemini</strong>
+      </article>
+    </section>
+
+    <section class="controls reveal">
+      <button id="toggleTheme">Toggle Glow</button>
+      <button id="showQuote">Show Inspiration</button>
+      <button id="toggleChart">Hide/Show Numerology Chart</button>
+      <button id="showAffirmation">Reveal My Energy</button>
+      <button id="spotlightLifePath">Spotlight Life Path</button>
+    </section>
+
+    <div class="message" id="messageBox">Welcome to Jasmine's page ✦</div>
+    <div class="affirmation hidden reveal" id="affirmationBox"></div>
+
+    <section class="sections">
+      <article class="card section-block reveal" id="summary">
+        <h2>Quick Summary</h2>
+        <p>
+          I am someone who loves truth, creativity, and discovery. I enjoy using my voice to explore meaningful ideas,
+          tell stories, and research history in a deeper way.
+        </p>
+        <p>
+          I am working on building a blog and starting a TikTok focused on my discoveries, thoughts, and unique perspective.
+        </p>
+      </article>
+
+      <article class="card section-block reveal" id="story">
+        <h2>My Story</h2>
+        <p>
+          I was born in Brooklyn and come from East New York. Growing up in Cypress Hills shaped my strength,
+          my point of view, and the way I see the world.
+        </p>
+        <p>
+          Family means everything to me. I was raised by my parents, Margaret Brown and Herbert Smith,
+          and my son Jameer Dore is my biggest blessing and my greatest motivation.
+        </p>
+      </article>
+
+      <article class="card section-block reveal" id="interests">
+        <h2>My Interests</h2>
+        <ul>
+          <li>Surfing social media</li>
+          <li>Walking around Times Square</li>
+          <li>Writing books using ChatGPT</li>
+          <li>Researching history and uncovering hidden truths once called myth</li>
+          <li>Learning about numerology and spiritual meaning</li>
+          <li>Creating content for my future blog and TikTok</li>
+        </ul>
+      </article>
+
+      <article class="card section-block reveal" id="numerology">
+        <h2>My Numerology</h2>
+        <p>
+          A Life Path number in numerology is based on your birth date and is believed to reveal your natural energy,
+          personal lessons, and deeper life purpose. My Life Path is <strong>7</strong>, which reflects a truth-seeking,
+          spiritual, analytical, and intuitive nature.
+        </p>
+        <div class="chart" id="numerologyChart">
+          <div class="number-box" id="lifePathCard">
+            <h3>Life Path</h3>
+            <div class="value">7</div>
+            <p>The seeker, researcher, and truth-finder.</p>
+          </div>
+          <div class="number-box">
+            <h3>Birthday Number</h3>
+            <div class="value">16/7</div>
+            <p>Insightful, spiritual, observant, and introspective.</p>
+          </div>
+          <div class="number-box">
+            <h3>Expression / Destiny</h3>
+            <div class="value">1</div>
+            <p>Independent, original, and meant to lead with your own voice.</p>
+          </div>
+          <div class="number-box">
+            <h3>Soul Urge</h3>
+            <div class="value">1</div>
+            <p>Driven by individuality, passion, and self-expression.</p>
+          </div>
+          <div class="number-box">
+            <h3>Personality Number</h3>
+            <div class="value">9</div>
+            <p>Compassionate, wise, inspiring, and deep.</p>
+          </div>
+          <div class="number-box">
+            <h3>Attitude Number</h3>
+            <div class="value">22/4</div>
+            <p>A visionary builder with powerful ideas.</p>
+          </div>
+          <div class="number-box">
+            <h3>Maturity Number</h3>
+            <div class="value">8</div>
+            <p>Leadership, strength, growth, and impact over time.</p>
+          </div>
+          <div class="number-box">
+            <h3>Zodiac Sign</h3>
+            <div class="value">Gemini</div>
+            <p>Curious, expressive, adaptable, and full of ideas.</p>
+          </div>
+        </div>
+
+        <div class="calc-form">
+          <input id="birthInput" type="text" placeholder="Enter birthday like 01/01/2026" />
+          <input id="nameInput" type="text" placeholder="Enter full name" />
+          <button id="calcNumerology" type="button">Calculate Numerology</button>
+          <div class="calc-result" id="calcResult">Enter a birthday and full name to calculate a basic numerology result.</div>
+        </div>
+      </article>
+
+      <article class="card section-block reveal" id="photos">
+        <h2>Photo Slideshow</h2>
+        <div class="slideshow">
+          <div class="slide active">
+            <img src="./Snapchat-2146402616.jpg" alt="Jasmine portrait" />
+            <!-- <img src="/mnt/data/Snapchat-1478404855.jpg" alt="Jasmine portrait" /> -->
+            <p>Confident, beautiful, and grounded in your energy.</p>
+          </div>
+          <div class="slide">
+            <img src="./Snapchat-2146402616.jpg" alt="Jasmine portrait 2" />
+            <p>Your presence reflects strength, style, and individuality.</p>
+          </div>
+        </div>
+        <div class="slide-controls">
+          <button id="prevSlide" type="button">Previous</button>
+          <button id="nextSlide" type="button">Next</button>
+          <button id="autoSlide" type="button">Auto Play</button>
+        </div>
+      </article>
+
+      <article class="card section-block reveal" id="blog">
+        <h2>My Blog</h2>
+        <p>
+          I am working on starting a blog where I will share my thoughts, discoveries, historical research,
+          hidden truths, and personal reflections. This space will be a home for my voice and my perspective.
+        </p>
+        <p>
+          My blog will focus on truth-seeking, myth versus reality, spirituality, numerology, history,
+          and the powerful ideas I uncover along the way.
+        </p>
+        <ul>
+          <li>Hidden truths in history</li>
+          <li>Myth versus reality</li>
+          <li>Numerology insights and life path reflections</li>
+          <li>Spiritual discoveries and personal growth</li>
+          <li>Stories, ideas, and creative writing</li>
+        </ul>
+      </article>
+    </section>
+
+    <p class="footer-note">A fancy digital page for Jasmine Brown ✦</p>
+  </main>
+
+  <script>
+    const navButtons = document.querySelectorAll('.nav-btn');
+    const messageBox = document.getElementById('messageBox');
+    const toggleThemeBtn = document.getElementById('toggleTheme');
+    const showQuoteBtn = document.getElementById('showQuote');
+    const toggleChartBtn = document.getElementById('toggleChart');
+    const showAffirmationBtn = document.getElementById('showAffirmation');
+    const spotlightLifePathBtn = document.getElementById('spotlightLifePath');
+    const chart = document.getElementById('numerologyChart');
+    const quoteBanner = document.getElementById('quoteBanner');
+    const dateBox = document.getElementById('dateBox');
+    const affirmationBox = document.getElementById('affirmationBox');
+    const lifePathCard = document.getElementById('lifePathCard');
+    const revealItems = document.querySelectorAll('.reveal');
+    const modeToggle = document.getElementById('modeToggle');
+    const birthInput = document.getElementById('birthInput');
+    const nameInput = document.getElementById('nameInput');
+    const calcNumerology = document.getElementById('calcNumerology');
+    const calcResult = document.getElementById('calcResult');
+    const slides = document.querySelectorAll('.slide');
+    const prevSlide = document.getElementById('prevSlide');
+    const nextSlide = document.getElementById('nextSlide');
+    const autoSlide = document.getElementById('autoSlide');
+    let slideIndex = 0;
+    let slideTimer = null;
+
+    const quotes = [
+      'Truth, purpose, and creativity all live here.',
+      'Jasmine is building something powerful, thoughtful, and real.',
+      'A Life Path 7 shines through wisdom, research, and intuition.',
+      'Every discovery can become a story worth sharing.'
+    ];
+
+    const affirmations = [
+      'Jasmine, your energy is intuitive, creative, and powerful.',
+      'Your path is about truth, depth, and discovering what others miss.',
+      'You carry wisdom, vision, and a strong voice worth sharing.',
+      'Your story, your son, and your ideas are part of something meaningful.'
+    ];
+
+    navButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        navButtons.forEach((btn) => btn.classList.remove('active'));
+        button.classList.add('active');
+        const target = button.dataset.target;
+        const section = document.getElementById(target);
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          messageBox.textContent = 'Viewing: ' + button.textContent;
+        }
+      });
+    });
+
+    toggleThemeBtn.addEventListener('click', () => {
+      const currentBg = getComputedStyle(document.documentElement).getPropertyValue('--bg-1').trim();
+      if (currentBg === '#120f2f') {
+        document.documentElement.style.setProperty('--bg-1', '#0f0c29');
+        document.documentElement.style.setProperty('--bg-2', '#1a1446');
+        document.documentElement.style.setProperty('--bg-3', '#3a2c74');
+        messageBox.textContent = 'Glow mode turned on.';
+      } else {
+        document.documentElement.style.setProperty('--bg-1', '#120f2f');
+        document.documentElement.style.setProperty('--bg-2', '#1d1747');
+        document.documentElement.style.setProperty('--bg-3', '#2c215f');
+        messageBox.textContent = 'Glow mode turned off.';
+      }
+    });
+
+    modeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      messageBox.textContent = document.body.classList.contains('light-mode')
+        ? 'Light mode turned on.'
+        : 'Dark mode turned on.';
+    });
+
+    showQuoteBtn.addEventListener('click', () => {
+      const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+      messageBox.textContent = randomQuote;
+      quoteBanner.textContent = randomQuote;
+    });
+
+    toggleChartBtn.addEventListener('click', () => {
+      chart.classList.toggle('hidden');
+      messageBox.textContent = chart.classList.contains('hidden')
+        ? 'Numerology chart hidden.'
+        : 'Numerology chart visible.';
+    });
+
+    showAffirmationBtn.addEventListener('click', () => {
+      const randomAffirmation = affirmations[Math.floor(Math.random() * affirmations.length)];
+      affirmationBox.textContent = randomAffirmation;
+      affirmationBox.classList.remove('hidden');
+      affirmationBox.classList.add('visible');
+      messageBox.textContent = 'Your energy has been revealed.';
+    });
+
+    spotlightLifePathBtn.addEventListener('click', () => {
+      document.querySelectorAll('.number-box').forEach((box) => box.classList.remove('spotlight'));
+      lifePathCard.classList.add('spotlight');
+      lifePathCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      messageBox.textContent = 'Life Path 7 spotlighted.';
+    });
+
+    function reduceNumber(num) {
+      while (num > 9 && num !== 11 && num !== 22 && num !== 33) {
+        num = String(num).split('').reduce((sum, digit) => sum + Number(digit), 0);
+      }
+      return num;
+    }
+
+    function nameNumber(name) {
+      const values = {
+        a:1,b:2,c:3,d:4,e:5,f:6,g:7,h:8,i:9,
+        j:1,k:2,l:3,m:4,n:5,o:6,p:7,q:8,r:9,
+        s:1,t:2,u:3,v:4,w:5,x:6,y:7,z:8
+      };
+      let total = 0;
+      name.toLowerCase().replace(/[^a-z]/g, '').split('').forEach(letter => {
+        total += values[letter] || 0;
+      });
+      return reduceNumber(total);
+    }
+
+    calcNumerology.addEventListener('click', () => {
+      const birth = birthInput.value.trim();
+      const name = nameInput.value.trim();
+      const digits = birth.replace(/[^0-9]/g, '');
+
+      if (digits.length !== 8 || !name) {
+        calcResult.textContent = 'Please enter a full name and a valid birthday in MM/DD/YYYY format.';
+        return;
+      }
+
+      const lifePath = reduceNumber(digits.split('').reduce((sum, d) => sum + Number(d), 0));
+      const destiny = nameNumber(name);
+      calcResult.textContent = `Life Path: ${lifePath} | Name / Destiny Number: ${destiny}`;
+      messageBox.textContent = 'Numerology calculated.';
+    });
+
+    function showSlide(index) {
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+    }
+
+    prevSlide.addEventListener('click', () => {
+      slideIndex = (slideIndex - 1 + slides.length) % slides.length;
+      showSlide(slideIndex);
+    });
+
+    nextSlide.addEventListener('click', () => {
+      slideIndex = (slideIndex + 1) % slides.length;
+      showSlide(slideIndex);
+    });
+
+    autoSlide.addEventListener('click', () => {
+      if (slideTimer) {
+        clearInterval(slideTimer);
+        slideTimer = null;
+        autoSlide.textContent = 'Auto Play';
+        messageBox.textContent = 'Slideshow paused.';
+      } else {
+        slideTimer = setInterval(() => {
+          slideIndex = (slideIndex + 1) % slides.length;
+          showSlide(slideIndex);
+        }, 3000);
+        autoSlide.textContent = 'Pause Auto Play';
+        messageBox.textContent = 'Slideshow playing.';
+      }
+    });
+
+    const today = new Date();
+    dateBox.textContent = today.toLocaleDateString('en-US', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric'
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15 });
+
+    revealItems.forEach((item) => observer.observe(item));
+  </script>
+</body>
+</html>
+
+
